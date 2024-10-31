@@ -9,9 +9,11 @@ export default function Button({
   children,
   isLoading,
   disabled,
+  className,
 }) {
   return (
     <BootstrapButton
+      className={className}
       variant={variant}
       size={size}
       onClick={onClick}
@@ -29,9 +31,7 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   disabled: PropTypes.bool,
   isLoading: PropTypes.bool,
+  className: PropTypes.string,
 };
 
-Button.defaultProps = {
-  variant: "primary",
-  size: "md",
-};
+

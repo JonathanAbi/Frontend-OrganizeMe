@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import styles from "./signin.module.css";
+import styles from "./signup.module.css";
 import { Link } from "react-router-dom";
 
-export default function FormSignIn({
+export default function FormSignUp({
   form,
   handleChange,
   handleSubmit,
@@ -16,8 +16,16 @@ export default function FormSignIn({
   return (
     <Form>
       <Input
-        label="Email"
+        label="Username"
         type="text"
+        name="username"
+        value={form.username}
+        onChange={handleChange}
+        placeholder="Enter username"
+      />
+      <Input
+        label="Email"
+        type="email"
         name="email"
         value={form.email}
         onChange={handleChange}
@@ -38,28 +46,25 @@ export default function FormSignIn({
         checked={showPassword}
         onChange={() => setShowPassword(!showPassword)}
       />
-      <div className="d-flex justify-content-between align-items-center mt-3">
-        <Button
-          className={styles.customButton}
-          variant="dark"
-          onClick={handleSubmit}
-          loading={isLoading}
-          disabled={isLoading}
-        >
-          Login
-        </Button>
-        <a href="#" style={{ textDecoration: "none" }}>
-          Forgot Password?
-        </a>
-      </div>
+      <Button
+        className={`${styles.customButton} mt-3`}
+        variant="dark"
+        onClick={handleSubmit}
+        isLoading={isLoading}
+        disabled={isLoading}
+      >
+        Sign Up
+      </Button>
       <div className="mt-2">
-        <a>Need an account? <Link to="/auth/signup">Sign Up</Link></a>
+        <a>
+          Already have an account? <Link to="/auth/signin">Log in</Link>
+        </a>
       </div>
     </Form>
   );
 }
 
-FormSignIn.propTypes = {
+FormSignUp.propTypes = {
   form: PropTypes.object,
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,

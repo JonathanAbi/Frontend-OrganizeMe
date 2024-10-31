@@ -33,8 +33,3 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   name: PropTypes.string,
 };
-
-Input.defaultProps = {
-  type: "text",
-  placeholder: "",
-};

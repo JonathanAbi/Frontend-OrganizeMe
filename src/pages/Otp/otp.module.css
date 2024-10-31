@@ -1,0 +1,29 @@
+body {
+  background-color: #1a1a1a !important;
+}
+
+.customCard {
+  background-color: #2c2c2c !important;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.customButton {
+  background-color: #2c2c2c !important;
+  border-color: #ffffff !important;
+  width: 100% !important;
+}
+
+.customButton:hover {
+  background-color: #000000 !important ;
+  border-color: #000000 !important;
+}
+
+a {
+  color: #dbdbdb !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: #ffffff !important;
+}
