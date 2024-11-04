@@ -48,12 +48,12 @@ export default function FormSignIn({
         >
           Login
         </Button>
-        <a href="#" style={{ textDecoration: "none" }}>
+        <a href="#" className={styles.customLink}>
           Forgot Password?
         </a>
       </div>
       <div className="mt-2">
-        <a>Need an account? <Link to="/auth/signup">Sign Up</Link></a>
+        <a>Need an account? <Link className={styles.customLink} to="/auth/signup">Sign Up</Link></a>
       </div>
     </Form>
   );

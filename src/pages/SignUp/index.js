@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Container, Card, Row, Col } from "react-bootstrap";
@@ -57,6 +57,14 @@ export default function SignUp() {
   const handleSubmit = () => {
     signupMutation.mutate(form);
   };
+
+  useEffect(() => {
+    document.body.style.backgroundColor = '#1a1a1a';
+    return () => {
+      document.body.style.backgroundColor = ''; // Kembali ke default saat komponen dilepas
+    };
+  }, []);
+
   return (
     <Container
       className="d-flex justify-content-center align-items-center"

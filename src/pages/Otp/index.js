@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Card, Row, Col } from "react-bootstrap";
 import api from "../../api/api";
 import { useMutation } from "@tanstack/react-query";
@@ -25,7 +25,7 @@ export default function index() {
 
   const otpMutation = useMutation({
     mutationFn: async (formData) => {
-      setIsLoading(true)
+      setIsLoading(true);
       console.log("Mutation started");
       const response = await api.put("/api/auth/verify-user", formData);
       console.log("Mutation finished");
@@ -69,6 +69,14 @@ export default function index() {
   const handleSubmit = () => {
     otpMutation.mutate(form);
   };
+
+  useEffect(() => {
+    document.body.style.backgroundColor = "#1a1a1a";
+    return () => {
+      document.body.style.backgroundColor = ""; // Kembali ke default saat komponen dilepas
+    };
+  }, []);
+
   return (
     <Container
       className="d-flex justify-content-center align-items-center"

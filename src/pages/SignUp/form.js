@@ -57,7 +57,7 @@ export default function FormSignUp({
       </Button>
       <div className="mt-2">
         <a>
-          Already have an account? <Link to="/auth/signin">Log in</Link>
+          Already have an account? <Link className={styles.customLink} to="/auth/signin">Log in</Link>
         </a>
       </div>
     </Form>

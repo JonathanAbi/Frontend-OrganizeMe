@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 export default function GuardRoute({ component }) {
-  const isAuthenticated = !!localStorage.getItem("token"); //!! mengubah nilai menjadi boolean, jika ada bernilai true
+  const isAuthenticated = !!localStorage.getItem("authToken"); //!! mengubah nilai menjadi boolean, jika ada bernilai true
 
   return isAuthenticated ? component : <Navigate to="/auth/signin" />;
 }

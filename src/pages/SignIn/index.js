@@ -12,7 +12,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -22,9 +22,16 @@ export default function SignIn() {
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
-      navigate("/");
+      navigate("/dashboard/");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    document.body.style.backgroundColor = "#1a1a1a";
+    return () => {
+      document.body.style.backgroundColor = ""; // Kembali ke default saat komponen dilepas
+    };
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -32,15 +39,15 @@ export default function SignIn() {
 
   const signinMutation = useMutation({
     mutationFn: async (formData) => {
-      setIsLoading(true)
+      setIsLoading(true);
       console.log("Mutation started");
       const response = await api.post("/api/auth/signin", formData);
       console.log("Mutation finished");
-      setIsLoading(false)
+      setIsLoading(false);
       return response;
     },
     onSuccess: (response) => {
-      console.log(response.data)
+      console.log(response.data);
       if (response.data) {
         login({
           username: response.data.data.username,
@@ -58,12 +65,28 @@ export default function SignIn() {
           theme: "dark",
           transition: Bounce,
         });
-        navigate("/");
+        navigate("/dashboard/");
       }
     },
     onError: (error) => {
-      setIsLoading(false)
-      if (error.response) {
+      setIsLoading(false);
+      if (error.response && error.response.status === 429) {
+        toast.error(
+          error.response.data ||
+            "Too many login attempts, please try again later.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+          }
+        );
+      } else {
         toast.error(error?.response?.data?.msg || "Internal server error", {
           position: "top-right",
           autoClose: 5000,
