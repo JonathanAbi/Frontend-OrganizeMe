@@ -11,18 +11,25 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     setUser({
-      id: userData.id,
-      name: userData.name,
+      username: userData.username,
       email: userData.email,
       token: userData.token,
+      refreshToken : userData.refreshToken
     });
-    localStorage.setItem("authToken", userData.token);
+    localStorage.setItem(
+      "authToken",
+      JSON.stringify({
+        username: userData.username,
+        email: userData.email,
+        token: userData.token,
+        refreshToken : userData.refreshToken
+      })
+    );
   };
   const logout = () => {
     setUser(null);
     localStorage.removeItem("authToken");
   };
-
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}

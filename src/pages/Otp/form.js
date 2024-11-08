@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
-import Input from "../../components/Input";
 import Button from "../../components/Button";
 import styles from "./otp.module.css";
 import { toast, Bounce } from "react-toastify";
 import api from "../../api/api";
+import { Input } from "antd";
 
 export default function FormOtp({
   form,
@@ -39,6 +39,11 @@ export default function FormOtp({
     }
   };
 
+  const handleOTPChange = (value) => {
+    // Perbarui nilai OTP di form saat input berubah
+    handleChange({ target: { name: "otpCode", value } });
+  };
+
   // useEffect untuk mengurangi cooldown setiap detik
   useEffect(() => {
     if (cooldown > 0) {
@@ -49,13 +54,20 @@ export default function FormOtp({
 
   return (
     <Form>
-      <Input
-        label=""
-        type="text"
-        name="otpCode"
+      <Input.OTP
+        length={6}
         value={form.otpCode}
-        onChange={handleChange}
-        placeholder="Enter Otp Code"
+        onChange={handleOTPChange}
+        autoFocus
+        inputStyle={{
+          width: "3rem",
+          height: "3rem",
+          margin: "0 0.5rem",
+          fontSize: "1.5rem",
+          textAlign: "center",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+        }}
       />
       <div className="mt-2">
         <a
@@ -64,7 +76,7 @@ export default function FormOtp({
           style={{
             cursor: cooldown === 0 ? "pointer" : "default",
             color: cooldown === 0 ? "white" : "grey",
-            textDecoration: "none"
+            textDecoration: "none",
           }}
         >
           {cooldown === 0 ? "Resend OTP" : `Please wait ${cooldown}s`}

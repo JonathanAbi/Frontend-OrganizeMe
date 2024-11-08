@@ -1,5 +1,5 @@
 import axios from "axios";
-import handleError from '../utils/handleError'
+import handleError from "../utils/handleError";
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -12,7 +12,10 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Ambil token dari localStorage
-    const token = localStorage.getItem("authToken");
+    const session = localStorage.getItem("authToken")
+      ? JSON.parse(localStorage.getItem("authToken"))
+      : {};
+    const token = session.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

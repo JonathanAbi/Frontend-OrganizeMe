@@ -47,12 +47,12 @@ export default function SignIn() {
       return response;
     },
     onSuccess: (response) => {
-      console.log(response.data);
       if (response.data) {
         login({
           username: response.data.data.username,
           email: response.data.data.email,
           token: response.data.data.token,
+          refreshToken: response.data.data.refreshToken
         });
         toast.success(`Hello ${response.data.data.username}`, {
           position: "top-right",

@@ -1,51 +1,39 @@
-import axios from "axios";
+import axios from 'axios';
 
-const handleError = async (error) => {
+const handleError = (error) => {
   const originalRequest = error.config;
-
-  // Cek jika error berasal dari token yang expired
-  if (
-    error.response &&
-    error.response.data &&
-    error.response.data.msg === "jwt expired" &&
-    !originalRequest._retry
-  ) {
+  if (error.response.data.msg === 'jwt expired') {
     originalRequest._retry = true; //request ini perlu dicoba ulang dengan token yang baru
-
-    const session = localStorage.getItem("auth")
-      ? JSON.parse(localStorage.getItem("auth"))
+    const session = localStorage.getItem('authToken')
+      ? JSON.parse(localStorage.getItem('authToken'))
       : {};
 
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/cms/refresh-token/${session.refreshToken}/${session.email}`
-      );
+    return axios
+      .get(`${process.env.REACT_APP_API_URL}/refresh-token/${session.refreshToken}/${session.email}`)
+      .then((res) => {
+        console.log('res');
+        console.log(res);
+        localStorage.setItem(
+          'authToken',
+          JSON.stringify({
+            ...session,
+            token: res.data.data.token,
+          })
+        );
+        originalRequest.headers.Authorization = `Bearer ${res.data.data.token}`; // mengganti ketoken yang baru
 
-      // Simpan token baru di localStorage
-      localStorage.setItem(
-        "auth",
-        JSON.stringify({
-          ...session,
-          token: res.data.data.token,
-        })
-      );
+        console.log('originalRequest');
+        console.log(originalRequest);
 
-      // Set header Authorization dengan token baru
-      originalRequest.headers.Authorization = `Bearer ${res.data.data.token}`;
-
-      // Ulangi request asli dengan token yang diperbarui
-      return axios(originalRequest);
-    } catch (err) {
-      console.error("Error refreshing token:", err);
-
-      // Jika refresh gagal, redirect ke login dan hapus session
-      localStorage.removeItem("auth");
-      window.location.href = "/login";
-    }
+        return axios(originalRequest); //hit ulang endpoint dan mengenmbalikan dalam bentuk promise
+      })
+      .catch((err) => {
+        console.log(err)
+        window.location.href = '/auth/signin';
+        localStorage.removeItem('authToken');
+      });
   }
-
-  // Jika bukan error karena token expired, return error seperti biasa
-  return Promise.reject(error);
+  return error;
 };
 
 export default handleError;
