@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import NavbarComponent from "../../components/Navbar";
+import Hero from "../../components/Hero";
 
 export default function LandingPage() {
+  useEffect(() => {
+    document.body.style.backgroundColor = "#1E1E1E";
+    return () => {
+      document.body.style.backgroundColor = ""; // Kembali ke default saat komponen dilepas
+    };
+  }, []);
   return (
-    <div className='text-primary'>Landing Page</div>
-  )
+    <>
+      <NavbarComponent isLandingPage={true} />
+      <Hero/>
+    </>
+  );
 }

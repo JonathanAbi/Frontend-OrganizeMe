@@ -71,7 +71,6 @@ export default function ModalCreate() {
         };
         createTaskMutation.mutate(formattedValues);
 
-        console.log("Form values:", formattedValues);
       })
       .catch((errorInfo) => {
         console.log("Validation Failed:", errorInfo);

@@ -1,0 +1,40 @@
+.customButton {
+  background-color: #3b82f6 !important;
+  border: none !important;
+}
+
+.customButton:hover {
+  background-color: #60a5fa !important;
+}
+
+.customfs {
+  font-size: 2.5rem !important;
+}
+
+@media (min-width: 768px) {
+  /* Breakpoint md */
+  .customfs {
+    font-size: 3.5rem !important;
+  }
+}
+
+@media (min-width: 992px) {
+  /* Breakpoint lg */
+  .customfs {
+    font-size: 2.1rem !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Breakpoint xl */
+  .customfs {
+    font-size: 3rem !important;
+  }
+}
+
+@media (min-width: 1400px) {
+  /* Breakpoint xl */
+  .customfs {
+    font-size: 3.5rem !important;
+  }
+}

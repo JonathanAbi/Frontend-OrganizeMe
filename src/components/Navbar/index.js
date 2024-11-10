@@ -1,12 +1,14 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Button from "../Button";
 import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import PropTypes from "prop-types";
 
-export default function NavbarComponent() {
+export default function NavbarComponent({ isLandingPage = false }) {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -28,13 +30,33 @@ export default function NavbarComponent() {
     });
   };
   return (
-    <Navbar bg="dark" data-bs-theme="dark">
+    <Navbar
+      bg="dark"
+      data-bs-theme="dark"
+      expand="lg"
+      className="bg-body-tertiary"
+    >
       <Container>
         <Navbar.Brand href="#home">OrganizeMe</Navbar.Brand>
-        <Button onClick={handleLogout} variant="outline-danger">
-          Logout
-        </Button>
+        <Nav className="ms-auto">
+          {isLandingPage ? (
+            <>
+              <Button onClick={() => navigate("/auth/signin")} className={"mx-2"} variant="#F97316">Log in</Button>
+              <Button onClick={() => navigate("/auth/signup")}>
+                Get Started
+              </Button>
+            </>
+          ) : (
+            <Button onClick={handleLogout} variant="outline-danger" class>
+              Logout
+            </Button>
+          )}
+        </Nav>
       </Container>
     </Navbar>
   );
 }
+
+NavbarComponent.propTypes = {
+  isLandingPage: PropTypes.bool,
+};

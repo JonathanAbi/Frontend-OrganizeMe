@@ -33,7 +33,7 @@ const handleError = (error) => {
         localStorage.removeItem('authToken');
       });
   }
-  return error;
+  return Promise.reject(error);
 };
 
 export default handleError;
