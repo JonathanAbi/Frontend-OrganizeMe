@@ -38,20 +38,31 @@ export default function NavbarComponent({ isLandingPage = false }) {
     >
       <Container>
         <Navbar.Brand href="#home">OrganizeMe</Navbar.Brand>
-        <Nav className="ms-auto">
-          {isLandingPage ? (
-            <>
-              <Button onClick={() => navigate("/auth/signin")} className={"mx-2"} variant="#F97316">Log in</Button>
-              <Button onClick={() => navigate("/auth/signup")}>
-                Get Started
-              </Button>
-            </>
-          ) : (
+        {isLandingPage ? (
+          <>
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="ms-auto">
+                <Button
+                  onClick={() => navigate("/auth/signin")}
+                  className={"mx-2"}
+                  variant="#F97316"
+                >
+                  Log in
+                </Button>
+                <Button onClick={() => navigate("/auth/signup")}>
+                  Get Started
+                </Button>
+              </Nav>
+            </Navbar.Collapse>
+          </>
+        ) : (
+          <Nav className="ms-auto">
             <Button onClick={handleLogout} variant="outline-danger" class>
               Logout
             </Button>
-          )}
-        </Nav>
+          </Nav>
+        )}
       </Container>
     </Navbar>
   );

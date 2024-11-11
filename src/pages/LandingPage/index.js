@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import NavbarComponent from "../../components/Navbar";
 import Hero from "../../components/Hero";
+import FeaturesSection from "../../components/FeaturesSection";
+import Footer from "../../components/Footer";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -13,6 +15,8 @@ export default function LandingPage() {
     <>
       <NavbarComponent isLandingPage={true} />
       <Hero/>
+      <FeaturesSection/>
+      <Footer/>
     </>
   );
 }

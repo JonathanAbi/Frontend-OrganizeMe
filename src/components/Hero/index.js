@@ -38,7 +38,7 @@ export default function Hero() {
           </Row>
         </Container>
       </div>
-      <div style={{ backgroundColor: "#2c3035", padding: "60px 0" }}>
+      <div style={{ backgroundColor: "#2c3035", padding: "40px 0" }}>
         <Container>
           <Row className="justify-content-center text-center">
             <Col lg={6}>
