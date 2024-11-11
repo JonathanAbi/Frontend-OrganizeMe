@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { useTasks } from "../../hooks/useTasks";
-import { Table, DatePicker, Input, Button, Popconfirm } from "antd";
+import { Table, DatePicker, Input, Button, Popconfirm, Tag, Card } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import api from "../../api/api";
 import ModalUpdate from "../ModalUpdate";
 
@@ -15,10 +16,12 @@ export default function TaskTable() {
   });
 
   // custom hook useTasks
-  const { data: tasks, isLoading, refetch } = useTasks(filters);
+  const { data: tasks = [], isLoading, refetch } = useTasks(filters);
 
   const [editTask, setEditTask] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const isMobile = window.innerWidth < 768; // Deteksi mobile
 
   // const handleFetchData = async () => {
   //   setLoading(true);
@@ -65,6 +68,58 @@ export default function TaskTable() {
       console.error("Error deleting task:", error);
     }
   };
+  const renderMobileView = () => {
+    return (
+      <div>
+        {tasks.map((task) => (
+          <Card
+            key={task._id}
+            title={task.title}
+            extra={
+              <>
+                <Button type="link" onClick={() => handleEdit(task)}>
+                  Edit
+                </Button>
+                <Popconfirm
+                  title="Are you sure to delete this task?"
+                  onConfirm={() => handleDelete(task._id)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="link" danger>
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </>
+            }
+            style={{ marginBottom: 16 }}
+          >
+            <p>
+              <strong>Due Date:</strong>{" "}
+              {moment(task.dueDate).format("YYYY-MM-DD HH:mm:ss")}
+            </p>
+            <p>
+              <strong>Priority:</strong>{" "}
+              <Tag
+                color={
+                  task.priority === "High"
+                    ? "red"
+                    : task.priority === "Medium"
+                      ? "orange"
+                      : "green"
+                }
+              >
+                {task.priority}
+              </Tag>
+            </p>
+            <p>
+              <strong>Status:</strong> {task.status}
+            </p>
+          </Card>
+        ))}
+      </div>
+    );
+  };
 
   const columns = [
     {
@@ -82,6 +137,7 @@ export default function TaskTable() {
       ),
       dataIndex: "title",
       key: "title",
+      width: "30%",
       filterDropdown: () => (
         <div style={{ padding: 8 }}>
           <Input
@@ -92,7 +148,13 @@ export default function TaskTable() {
           />
         </div>
       ),
-      filterIcon: () => <i className="anticon anticon-search" />,
+      filterIcon: () => (
+        <SearchOutlined
+          style={{
+            color: "white",
+          }}
+        />
+      ),
     },
     {
       title: (
@@ -109,6 +171,7 @@ export default function TaskTable() {
       ),
       dataIndex: "dueDate",
       key: "dueDate",
+      align: "center",
       render: (text) => {
         return moment(text).format("YYYY-MM-DD HH:mm:ss");
       },
@@ -117,7 +180,13 @@ export default function TaskTable() {
           <RangePicker onChange={handleDateRangeChange} />
         </div>
       ),
-      filterIcon: () => <i className="anticon anticon-calendar" />,
+      filterIcon: () => (
+        <SearchOutlined
+          style={{
+            color: "white",
+          }}
+        />
+      ),
     },
     {
       title: (
@@ -134,12 +203,30 @@ export default function TaskTable() {
       ),
       dataIndex: "priority",
       key: "priority",
+      align: "center",
       filters: [
         { text: "High", value: "High" },
         { text: "Medium", value: "Medium" },
         { text: "Low", value: "Low" },
       ],
       onFilter: (value, record) => record.priority === value,
+      render: (priority) => {
+        let color;
+        switch (priority) {
+          case "High":
+            color = "red";
+            break;
+          case "Medium":
+            color = "orange";
+            break;
+          case "Low":
+            color = "green";
+            break;
+          default:
+            color = "gray";
+        }
+        return <Tag color={color}>{priority}</Tag>;
+      },
     },
     {
       title: (
@@ -156,6 +243,7 @@ export default function TaskTable() {
       ),
       dataIndex: "status",
       key: "status",
+      align: "center",
       filters: [
         { text: "Completed", value: "Completed" },
         { text: "In Progress", value: "In Progress" },
@@ -177,6 +265,7 @@ export default function TaskTable() {
         </span>
       ),
       key: "action",
+      align: "center",
       render: (text, record) => (
         <div>
           <Button type="link" onClick={() => handleEdit(record)}>
@@ -198,31 +287,35 @@ export default function TaskTable() {
   ];
   return (
     <>
-      <Table
-        columns={columns}
-        dataSource={tasks}
-        loading={isLoading}
-        bordered
-        pagination={{ pageSize: 5 }}
-        rowKey="_id"
-        locale={{ emptyText: "No tasks available" }}
-        expandable={{
-          expandedRowRender: (record) => (
-            <p
-              style={{
-                margin: 0,
-              }}
-            >
-              {record.description}
-            </p>
-          ),
-        }}
-      />
-        <ModalUpdate
-          visible={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          task={editTask}
+      {isMobile ? (
+        renderMobileView()
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={tasks}
+          loading={isLoading}
+          bordered
+          pagination={{ pageSize: 5 }}
+          rowKey="_id"
+          locale={{ emptyText: "No tasks available" }}
+          expandable={{
+            expandedRowRender: (record) => (
+              <p
+                style={{
+                  margin: 0,
+                }}
+              >
+                {record.description}
+              </p>
+            ),
+          }}
         />
+      )}
+      <ModalUpdate
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        task={editTask}
+      />
     </>
   );
 }
