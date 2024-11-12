@@ -11,11 +11,13 @@ const api = axios.create({
 // Interceptor untuk menambahkan Bearer token secara otomatis
 api.interceptors.request.use(
   (config) => {
+    console.log("Authorization Header:", config.headers.Authorization);
+
     // Ambil token dari localStorage
     const session = localStorage.getItem("authToken")
       ? JSON.parse(localStorage.getItem("authToken"))
       : {};
-    const token = session.token;
+    const token = session?.token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

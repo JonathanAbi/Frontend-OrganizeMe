@@ -37,7 +37,7 @@ export default function NavbarComponent({ isLandingPage = false }) {
       className="bg-body-tertiary"
     >
       <Container>
-        <Navbar.Brand href="#home">OrganizeMe</Navbar.Brand>
+        <Navbar.Brand href="/">OrganizeMe</Navbar.Brand>
         {isLandingPage ? (
           <>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
